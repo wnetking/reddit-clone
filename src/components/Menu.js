@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink
+  Collapse, Navbar, NavbarToggler, Nav, NavItem, 
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
 
@@ -30,9 +30,6 @@ export default class Menu extends React.Component {
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <Link to="/add-post" className="nav-link">Добавить пост</Link>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
               </NavItem>
             </Nav>
           </Collapse>

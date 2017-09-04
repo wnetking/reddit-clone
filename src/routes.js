@@ -1,56 +1,36 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import {Container, Row, Col} from 'reactstrap';
-
-import * as firebase from "firebase";
-import config from './containers/App/firebase-config';
-
 import Menu from './components/Menu'
 import Posts from './containers/Posts';
 import AddPost from './containers/AddPost';
+import * as postActions from './actions/postActions'
+
+import  {db} from './utils/firebaseUtils/'
+db.connect();
 
 class Routes extends Component {
-  constructor() {
-    super();
-
-    // Initialize Firebase
-    this.state = {
-      loading: true
-    }
-
-    firebase.initializeApp(config);
-  }
-
   componentWillMount() {
-    let postsRef = firebase.database().ref('posts');
-
-    let _this = this;
-
-    postsRef.on('value', function (snapshot) {
-      console.log(snapshot.val());
-
-      _this.setState({
-        posts  : snapshot.val(),
-        loading: false
-      });
+    db.getPosts((snapshot) => {
+      let {postActions} = this.props;
+      postActions.fetchPosts(snapshot.val());
     });
   }
 
   render() {
-    let data = {
-      firebase: firebase.database(),
-      posts   : this.state.posts,
-      loading : this.state.loading
-    }
+    let {post, postActions} = this.props;
+
     return (
       <Router>
         <div>
           <Menu />
-          <Container className="mt-5">
+          <Container className="mt-4">
             <Row>
               <Col>
-                <Route exact path="/" render={() => <Posts data={data} />}/>
-                <Route path="/add-post" render={() => <AddPost data={data} />}/>
+                <Route exact path="/" render={() => <Posts post={post} postActions={postActions} />}/>
+                <Route path="/add-post" render={() => <AddPost />}/>
               </Col>
             </Row>
           </Container>
@@ -60,5 +40,15 @@ class Routes extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return state;
+}
 
-export default Routes;
+function mapDispatchToProps(dispatch) {
+  return {
+    postActions: bindActionCreators(postActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routes);
+

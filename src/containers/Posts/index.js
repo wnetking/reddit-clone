@@ -1,56 +1,49 @@
 import React, {Component} from 'react';
-import {Card, Button, CardTitle, CardText, Row, Col} from 'reactstrap';
+import {Media, ButtonGroup, Button, Row, Col} from 'reactstrap';
+import  {db} from '../../utils/firebaseUtils/'
 
 class Posts extends Component {
-  handleUpvote = (post, key) => {
-    this.props.data.firebase.ref('posts/' + key).set({
-      title   : post.title,
-      upvote  : post.upvote + 1,
-      downvote: post.downvote
-    });
-  }
-
-  handleDownvote = (post, key) => {
-    this.props.data.firebase.ref('posts/' + key).set({
-      title   : post.title,
-      upvote  : post.upvote,
-      downvote: post.downvote + 1
-    });
-  }
-
   render() {
-    let posts = this.props.data.posts;
-    let _this = this;
+    let {posts, fetching} = this.props.post;
+    let {postActions} = this.props;
 
-    if (!posts) {
-      return false;
-    }
-
-    if (this.props.data.loading) {
+    if (fetching) {
       return (
-        <div>
-          Loading... </div>
+        <div>Loading... </div>
       );
     }
 
     return (
       <Row>
-        {Object.keys(posts).map(function (key) {
+        {Object.keys(posts).map((key) => {
           return (
-            <Col sm="6" key={key}>
-              <Card block>
-                <CardTitle>Title: {posts[key].title}</CardTitle>
-                <CardText>
-                  <div>Upvotes: {posts[key].upvote}</div>
-                  <div>Downvotes: {posts[key].downvote}</div>
-                </CardText>
-                <Button onClick={_this.handleUpvote.bind(this, posts[key], key)}>
-                  Upvote
-                </Button>
-                <Button className="mt-2" onClick={_this.handleDownvote.bind(this, posts[key], key)}>
-                  Downvote
-                </Button>
-              </Card>
+            <Col xs="12" key={key} className="mt-2">
+              <div className="card">
+                <div className="card-block">
+                  <Media>
+                    <ButtonGroup vertical className="align-self-center mr-3">
+                      <Button size="sm" onClick={postActions.postUpvote.bind(this, posts[key], key)}>
+                        U
+                      </Button>
+                        <span className="btn btn-secondary btn-sm disabled">
+                          {posts[key].upvote - posts[key].downvote}
+                        </span>
+                      <Button size="sm" onClick={postActions.postDownvote.bind(this, posts[key], key)}>
+                        D
+                      </Button>
+                    </ButtonGroup>
+                    <Media left href="#" className="mr-3">
+                      <Media object width="80" height="80" src="http://loremflickr.com/cache/images/f512fedb2caf38c32d290f98abfddbac.41.jpg" alt="Generic placeholder image"/>
+                    </Media>
+                    <Media body>
+                      <Media heading>
+                        {posts[key].title}
+                      </Media>
+                      {posts[key].author}
+                    </Media>
+                  </Media>
+                </div>
+              </div>
             </Col>
           );
         })}
