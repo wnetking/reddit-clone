@@ -6,7 +6,7 @@ export const db = {
     firebase.initializeApp(config);
   },
   getPosts(action){
-    let postsRef = this.data().ref('posts');
+    let postsRef = this.data().ref('posts').orderByKey().limitToLast(100);
 
     postsRef.on('value', action);
   },

@@ -1,5 +1,5 @@
 import {
-  FETCH_POSTS, POST_UPVOTE, POST_DOWNVOTE
+  FETCH_POSTS, POST_UPVOTE, POST_DOWNVOTE, ADD_POST, ADD_COMMENTS
 } from '../constants'
 
 const initialState = {
@@ -20,6 +20,16 @@ export default function post(state = initialState, action) {
         ...action.payload
       }
     case POST_DOWNVOTE:
+      return {
+        ...state,
+        ...action.payload
+      }
+    case ADD_POST:
+      return {
+        ...state,
+        ...action.payload
+      }
+    case ADD_COMMENTS:
       return {
         ...state,
         ...action.payload

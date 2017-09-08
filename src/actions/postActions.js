@@ -1,5 +1,5 @@
 import {
-  FETCH_POSTS, POST_UPVOTE,POST_DOWNVOTE
+  FETCH_POSTS, POST_UPVOTE, POST_DOWNVOTE, ADD_POST, ADD_COMMENTS
 } from '../constants'
 import  {db} from '../utils/firebaseUtils/'
 
@@ -35,6 +35,30 @@ export function postDownvote(post, key) {
     dispatch({
       type   : POST_DOWNVOTE,
       payload: {}
+    });
+  }
+}
+
+export function addComment(post, key, data) {
+  return (dispatch) => {
+    db.data().ref('posts/' + key + '/comments').push(data);
+    db.data().ref('posts/' + key).update({
+      commentsCount: post.commentsCount + 1
+    });
+    dispatch({
+      type   : ADD_COMMENTS,
+      payload: {}
+    });
+  }
+}
+
+export function addPost(data) {
+  return (dispatch) => {
+    db.data().ref('posts').push(data).then(() => {
+      dispatch({
+        type   : ADD_POST,
+        payload: {}
+      });
     });
   }
 }
