@@ -8,6 +8,7 @@ import Posts from './containers/Posts';
 import AddPost from './containers/AddPost';
 import Post from './containers/Post';
 import * as postActions from './actions/postActions'
+import config from './utils/config.json'
 
 import  {db} from './utils/firebaseUtils/'
 db.connect();
@@ -30,9 +31,9 @@ class Routes extends Component {
           <Container className="mt-4">
             <Row>
               <Col>
-                <Route exact path="/" render={() => <Posts post={post} postActions={postActions} />}/>
-                <Route path="/add-post" render={() => <AddPost postActions={postActions} />}/>
-                <Route path="/post/:id" render={({match}) => <Post match={match} post={post} postActions={postActions}/>}/>
+                <Route exact path={`${config.pathPrefix}`} render={() => <Posts post={post} postActions={postActions} />}/>
+                <Route path={`${config.pathPrefix}add-post`} render={() => <AddPost postActions={postActions} />}/>
+                <Route path={`${config.pathPrefix}post/:id`} render={({match}) => <Post match={match} post={post} postActions={postActions}/>}/>
               </Col>
             </Row>
           </Container>

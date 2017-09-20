@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Media, ButtonGroup, Button, Row, Col} from 'reactstrap';
 import {Link} from 'react-router-dom'
 import {helper} from '../../utils/helpersUtils'
+import config from '../../utils/config.json'
 
 class Posts extends Component {
   render() {
@@ -36,7 +37,7 @@ class Posts extends Component {
                     </Media>
                     <Media body>
                       <Media heading>
-                        <Link to={`/post/${key}`}>
+                        <Link to={`${config.pathPrefix}post/${key}`}>
                           {posts[key].title}
                         </Link>
                       </Media>
